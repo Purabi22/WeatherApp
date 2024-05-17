@@ -24,9 +24,14 @@ const days = [
 // Function to get the user's geolocation
 function getLocation() {
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition, showError);
+    navigator.geolocation.getCurrentPosition(showPosition, showError, {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    });
   } else {
     console.log("Geolocation is not supported by this browser.");
+    alert("Geolocation is not supported by this browser.");
   }
 }
 
@@ -42,15 +47,19 @@ function showError(error) {
   switch (error.code) {
     case error.PERMISSION_DENIED:
       console.log("User denied the request for Geolocation.");
+      alert("Please enable location services in your browser settings.");
       break;
     case error.POSITION_UNAVAILABLE:
       console.log("Location information is unavailable.");
+      alert("Location information is unavailable.");
       break;
     case error.TIMEOUT:
       console.log("The request to get user location timed out.");
+      alert("The request to get user location timed out.");
       break;
     case error.UNKNOWN_ERROR:
       console.log("An unknown error occurred.");
+      alert("An unknown error occurred.");
       break;
   }
 }
@@ -86,6 +95,7 @@ async function findLocationByCoords(lat, lon) {
     }
   } catch (error) {
     console.error("Error fetching data: ", error);
+    alert("Error fetching data.");
   }
 }
 
@@ -120,6 +130,7 @@ async function findLocation(name) {
     }
   } catch (error) {
     console.error("Error fetching data: ", error);
+    alert("Error fetching data.");
   }
 }
 
@@ -176,6 +187,7 @@ async function displayForeCast(lat, lon) {
     });
   } catch (error) {
     console.error("Error fetching forecast data: ", error);
+    alert("Error fetching forecast data.");
   }
 }
 
@@ -214,9 +226,12 @@ btnEl.addEventListener("click", (e) => {
     findLocation(search);
   } else {
     console.log("Please enter a city or country name.");
+    alert("Please enter a city or country name.");
   }
 });
 
 // Initialize the application
-getLocation();
-displayCurrentDate();
+document.addEventListener("DOMContentLoaded", () => {
+  getLocation();
+  displayCurrentDate();
+});
